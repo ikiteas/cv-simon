@@ -1,5 +1,16 @@
-# Capturas ORIGINALES sin sanitizar: nunca deben publicarse
+# Capturas ORIGINALES sin sanitizar: nunca se publican
 img/SW a ERP/
+# Ficheros de trabajo
 _*.py
 _*.png
+_*.html
+sanitizar_capturas.py
 __pycache__/
+# Maquetas descartadas y duplicados
+img/control-taller.png
+img/planificacion.png
+img/cv-portada.png
+# Capturas pendientes de sanitizar y verificar
+img/swerp-*.png
+img/taller-02-tratamientos.png
+img/taller-03-proyectos.png
