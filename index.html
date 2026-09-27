@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Simón Pérez Rodríguez — IA aplicada a la industria</title>
 <meta name="description" content="Casos reales de IA llevada a producción en una ingeniería de máquinas especiales: integración CAD-ERP, lectura automática de facturas, control de material, búsqueda semántica y cuadros de mando.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600&display=swap" rel="stylesheet">
 <style>
   :root{
     --azul:#1b4b8a; --azul2:#3d5a82; --tinta:#161a20; --gris:#5a6472;
@@ -61,12 +64,12 @@
   .manifiesto{border-bottom:1px solid var(--linea);position:relative;
               background:linear-gradient(rgba(10,22,40,.78),rgba(10,22,40,.78)),
                          url("img/maquina.jpg") center 42%/cover no-repeat;}
-  .manifiesto .env{padding-top:86px;padding-bottom:86px}
-  .manifiesto p{font-family:Georgia,"Times New Roman",serif;font-size:1.85rem;line-height:1.36;
-                margin:0;max-width:19em;color:#fff;text-shadow:0 1px 14px rgba(0,0,0,.35)}
+  .manifiesto .env{padding-top:96px;padding-bottom:96px;text-align:center}
+  .manifiesto p{font-family:Georgia,"Times New Roman",serif;font-size:1.95rem;line-height:1.34;
+                margin:0 auto;max-width:27em;color:#fff;text-shadow:0 1px 14px rgba(0,0,0,.35)}
   .manifiesto em{font-style:italic;color:#fff;border-bottom:2px solid rgba(255,255,255,.75)}
-  .manifiesto .pie{margin-top:18px;font-family:"Segoe UI",Arial,sans-serif;font-size:.92rem;
-                   color:rgba(255,255,255,.78);max-width:64em;text-shadow:none}
+  .manifiesto .pie{margin:22px auto 0;font-family:"Segoe UI",Arial,sans-serif;font-size:.92rem;
+                   color:rgba(255,255,255,.78);max-width:56em;text-shadow:none}
 
   /* Franja de servicios */
   .servicios{border-bottom:1px solid var(--linea)}
@@ -95,7 +98,7 @@
                 text-transform:uppercase;color:var(--gris);margin-top:4px}
   /* Grafico de barras */
   .barras{margin:26px 0 6px;border:1px solid var(--linea);border-radius:10px;padding:22px;
-          background:#fff}
+          background:var(--suave)}
   .barras .tit{font-weight:700;font-size:1rem;color:var(--tinta);margin:0 0 2px}
   .barras .sub{font-size:.92rem;color:var(--gris);margin:0 0 16px}
   .barras .ley{display:flex;gap:20px;flex-wrap:wrap;font-size:.78rem;color:var(--gris);
@@ -116,12 +119,15 @@
   .barras hr{border:none;border-top:1px dashed var(--linea);margin:14px 0}
   .barras .nota{font-size:.8rem;color:var(--gris);margin:16px 0 0}
 
-  h2.ancho{max-width:none;line-height:1.12;margin-bottom:10px;white-space:nowrap}
-  @media (max-width:1060px){ h2.ancho{white-space:normal;font-size:1.45rem} }
+  h2.ancho{max-width:none;margin:0 0 14px;color:var(--tinta);
+           font-family:"Oswald","Arial Narrow","Segoe UI",Arial,sans-serif;
+           font-weight:600;font-size:3.1rem;line-height:1.02;
+           letter-spacing:.015em;text-transform:uppercase}
+  @media (max-width:1060px){ h2.ancho{font-size:2.2rem} }
 
   /* Flujo antes / ahora */
   .flujo{margin:26px 0 6px;border:1px solid var(--linea);border-radius:10px;padding:20px 22px;
-         background:#fff}
+         background:var(--suave)}
   .flujo .fila{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:14px}
   .flujo .fila:last-of-type{margin-bottom:0}
   .flujo .et{font-size:.72rem;text-transform:uppercase;letter-spacing:1.2px;color:var(--gris);
@@ -135,7 +141,7 @@
 
   /* Franja de actividad */
   .franja{display:flex;flex-wrap:wrap;border:1px solid var(--linea);border-radius:10px;
-          background:#fff;margin:22px 0 6px;overflow:hidden}
+          background:var(--suave);margin:22px 0 6px;overflow:hidden}
   .franja .c{flex:1 1 150px;padding:15px 18px;border-right:1px solid var(--linea)}
   .franja .c:last-child{border-right:none}
   .franja .n{font-size:1.5rem;font-weight:700;color:var(--tinta);line-height:1.1}
@@ -145,7 +151,7 @@
 
   /* Tabla de escenarios */
   .escenarios{margin:22px 0 6px;border:1px solid var(--linea);border-radius:10px;padding:20px 22px;
-              background:#fff}
+              background:var(--suave)}
   .escenarios .tit{font-weight:700;font-size:1rem;margin:0 0 2px;color:var(--tinta)}
   .escenarios .sub{font-size:.92rem;color:var(--gris);margin:0 0 14px}
   .escenarios table{border-collapse:collapse;width:100%;font-size:.88rem}
@@ -184,7 +190,15 @@
   .tarjeta .cuerpo{flex:1}
 
   /* Secciones */
-  section{padding:46px 0 6px}
+  section{padding:30px 0 6px}
+  /* Cada seccion y cada caso, en su propia tarjeta blanca */
+  .zona-tarjetas{background:var(--suave);border-top:1px solid var(--linea);
+                 border-bottom:1px solid var(--linea);padding:40px 0 40px}
+  .zona-tarjetas section{padding:26px 0 0}
+  .zona-tarjetas section:first-child{padding-top:0}
+  .tarjeton{background:#fff;border:1px solid var(--linea);border-radius:14px;
+            padding:26px 30px 22px;margin-bottom:20px;
+            box-shadow:0 1px 3px rgba(18,32,52,.05)}
   h2{font-size:1.55rem;color:var(--azul);margin:0 0 6px}
   .lead{color:var(--gris);margin:0 0 6px}
   .cabecera{border-bottom:1px solid var(--linea);padding-bottom:15px;margin-bottom:2px}
@@ -192,11 +206,13 @@
   .cabecera h2{margin:0 0 7px}
   .cabecera .lead{font-size:.92rem;margin:0;max-width:none}
   .cabecera + article{border-top:none}
-  article{padding:40px 0 6px}
+  article{background:#fff;border:1px solid var(--linea);border-radius:14px;
+          padding:26px 30px 22px;margin-bottom:20px;
+          box-shadow:0 1px 3px rgba(18,32,52,.05)}
   .subcaso{color:var(--gris);font-size:.92rem;margin:0 0 4px;padding-bottom:14px;
            border-bottom:1px solid var(--linea)}
   .subcaso + p{margin-top:18px}
-  article h3{margin:0 0 8px;font-size:1.25rem;color:var(--azul)}
+  article h3{margin:0 0 8px;font-size:1.55rem;line-height:1.2;color:var(--azul)}
   .estado{display:inline-block;font-size:.72rem;letter-spacing:.6px;text-transform:uppercase;
           color:var(--azul);border:1px solid var(--linea);border-radius:999px;
           padding:3px 10px;margin-bottom:12px;background:var(--suave)}
@@ -359,13 +375,14 @@
   </div>
 </div>
 
+<div class="zona-tarjetas">
 <div class="env">
 
 <section>
   <div class="cabecera">
-    <h2 class="ancho">Siete sistemas propios, cada uno con el problema que resolvía</h2>
-    <p class="lead">Se analizó, se midió, se diseñó, se mejoró y por último se verificó que cumplía
-       la especificación.</p>
+    <h2 class="ancho">Siete sistemas propios</h2>
+    <p class="lead">Cada uno con el problema que resolvía. Se analizó, se midió, se diseñó, se
+       mejoró y por último se verificó que cumplía la especificación.</p>
   </div>
 
   <article>
@@ -529,6 +546,35 @@
         medido, pero cualquiera que haya estado en una oficina técnica sabe que existe.</p>
     </div>
 
+    <div class="galeria">
+      <figure>
+        <a href="img/swerp-01-tabla.png" target="_blank" rel="noopener">
+          <img src="img/swerp-01-tabla.png" alt="Tabla de control de propiedades con el resultado de las reglas"></a>
+        <figcaption>Cada pieza del ensamblaje con sus propiedades y el resultado de las reglas. En
+          verde lo que cumple; en naranja, el motivo exacto por el que no pasa.</figcaption>
+      </figure>
+      <div class="rejilla">
+        <figure>
+          <a href="img/swerp-02-reglas.png" target="_blank" rel="noopener">
+            <img src="img/swerp-02-reglas.png" alt="Configuración del sistema de reglas"></a>
+          <figcaption>Las reglas son de la empresa, no del programa: se configuran por tipo de
+            elemento y se versionan junto a la aplicación.</figcaption>
+        </figure>
+        <figure>
+          <a href="img/swerp-03-cotejo.png" target="_blank" rel="noopener">
+            <img src="img/swerp-03-cotejo.png" alt="Cotejo del árbol del ensamblaje contra el ERP"></a>
+          <figcaption>Cotejo del árbol completo contra lo que hay en el ERP, antes de subir nada.</figcaption>
+        </figure>
+        <figure>
+          <a href="img/swerp-04-tratamientos.png" target="_blank" rel="noopener">
+            <img src="img/swerp-04-tratamientos.png" alt="Asignación de tratamientos"></a>
+          <figcaption>Tratamientos asignados pieza a pieza, que luego el taller consulta en su
+            propia herramienta.</figcaption>
+        </figure>
+      </div>
+      <p class="nota">Capturas reales con la ruta interna y los proveedores ocultos.</p>
+    </div>
+
     <p class="tec">Aplicación de escritorio · API de CAD paramétrico · ERP · reglas deterministas.
        Decisión consciente: aquí descarté un modelo de lenguaje. En un pedido de compra,
        «casi siempre acierta» no sirve.</p>
@@ -685,6 +731,7 @@
 </section>
 
 <section id="trayectoria">
+  <div class="tarjeton">
   <div class="cabecera">
     <h2>Cómo llegué hasta aquí</h2>
     <p class="lead">De las compras y la logística a dirigir proyectos de máquina completos, pasando
@@ -704,9 +751,11 @@
   <p>De forma transversal, lo que siempre me ha interesado es la mejora de los procesos en los que
      participaba. Estando dentro del ciclo se puede analizar el proceso, medirlo, rediseñarlo.
      Desde fuera solo se puede opinar sobre él.</p>
+  </div>
 </section>
 
 <section id="metodo">
+  <div class="tarjeton">
   <div class="cabecera">
     <h2>Cómo trabajo</h2>
     <p class="lead">Las reglas que no me salto cuando llevo un sistema a producción.</p>
@@ -735,8 +784,10 @@
      especiales. Por respeto a su información y a la de sus clientes, esta página no incluye
      nombres ni datos económicos: solo el planteamiento, las decisiones y los resultados medidos.
      Puedo explicar cualquiera de ellos con más detalle en una conversación.</p>
+  </div>
 </section>
 
+</div>
 </div>
 
 <div class="cv">
