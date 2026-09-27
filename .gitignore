@@ -1,0 +1,5 @@
+# Capturas ORIGINALES sin sanitizar: nunca deben publicarse
+img/SW a ERP/
+_*.py
+_*.png
+__pycache__/
