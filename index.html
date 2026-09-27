@@ -1,0 +1,776 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Simón Pérez Rodríguez — IA aplicada a la industria</title>
+<meta name="description" content="Casos reales de IA llevada a producción en una ingeniería de máquinas especiales: integración CAD-ERP, lectura automática de facturas, control de material, búsqueda semántica y cuadros de mando.">
+<style>
+  :root{
+    --azul:#1b4b8a; --azul2:#3d5a82; --tinta:#161a20; --gris:#5a6472;
+    --ocre:#b4622d; --linea:#e2e6ec; --fondo:#ffffff; --suave:#f5f7fa;
+  }
+  /* Siempre en claro: la mayoría de navegadores del trabajo están en modo oscuro
+     y esta página debe verse igual para todos. */
+  :root{ color-scheme: light; }
+  }
+  *{box-sizing:border-box}
+  /* Marco: la web no se estira en pantallas anchas */
+  .marco{max-width:1280px;margin:0 auto;background:var(--fondo);overflow:hidden;
+         box-shadow:0 0 48px rgba(18,32,52,.12)}
+  @media (max-width:1320px){ .marco{box-shadow:none} }
+  body{margin:0;background:#e7eaef;color:var(--tinta);
+       font:16px/1.65 "Segoe UI",system-ui,-apple-system,Arial,sans-serif}
+  h1,h2,h3,.logo{font-family:Georgia,"Iowan Old Style","Times New Roman",serif;font-weight:700;letter-spacing:-.2px}
+  .env{max-width:1120px;margin:0 auto;padding:0 26px}
+  a{color:var(--azul)}
+
+  /* Barra superior */
+  .barra{border-bottom:5px solid var(--azul)}
+  .barra .env{display:flex;align-items:center;gap:18px;padding-top:16px;padding-bottom:16px;flex-wrap:wrap}
+  .logo{font-weight:700;letter-spacing:.4px}
+  .logo span{display:block;font-weight:400;font-size:.76rem;color:var(--gris);letter-spacing:1.6px;text-transform:uppercase}
+  .barra .datos{margin-left:auto;display:flex;gap:26px;font-size:.88rem}
+  .barra .datos .et{display:block;font-size:.7rem;text-transform:uppercase;letter-spacing:1px;color:var(--gris)}
+  .barra a{text-decoration:none}
+
+  /* Portada */
+  .portada{background:var(--suave);border-bottom:1px solid var(--linea);position:relative;overflow:hidden}
+  .portada .env{position:relative;z-index:2;padding-top:60px;padding-bottom:56px;
+                display:flex;justify-content:flex-end;align-items:flex-start}
+  .portada .texto{max-width:56%}
+  .portada h1{font-size:3.2rem;line-height:1.06;margin:0 0 16px;color:var(--tinta);white-space:nowrap}
+  .portada .sub{font-family:Georgia,"Times New Roman",serif;font-size:1.3rem;line-height:1.45;
+                color:var(--azul2);font-weight:400;margin:0 0 20px;max-width:26em}
+  .portada p{margin:0 0 22px;max-width:34em}
+  .boton{display:inline-block;border:1.5px solid var(--azul);color:var(--azul);
+         text-decoration:none;font-weight:600;padding:11px 22px;border-radius:6px}
+  .boton:hover{background:var(--azul);color:#fff}
+  .botones{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+  .boton.suave{border-color:#c9d4e4;color:var(--azul2);font-weight:500}
+  .boton.suave:hover{border-color:var(--azul);background:var(--azul);color:#fff}
+  .boton.principal{background:var(--azul);color:#fff}
+  .boton.principal:hover{background:var(--tinta);border-color:var(--tinta)}
+  html{scroll-behavior:smooth}
+  section[id]{scroll-margin-top:24px}
+  .foto{position:absolute;left:26px;top:60px;height:calc(100% - 116px);width:auto;
+        max-width:42%;object-fit:contain;object-position:left top;
+        z-index:1;pointer-events:none}
+
+  /* Frase */
+  .manifiesto{border-bottom:1px solid var(--linea);position:relative;
+              background:linear-gradient(rgba(10,22,40,.78),rgba(10,22,40,.78)),
+                         url("img/maquina.jpg") center 42%/cover no-repeat;}
+  .manifiesto .env{padding-top:86px;padding-bottom:86px}
+  .manifiesto p{font-family:Georgia,"Times New Roman",serif;font-size:1.85rem;line-height:1.36;
+                margin:0;max-width:19em;color:#fff;text-shadow:0 1px 14px rgba(0,0,0,.35)}
+  .manifiesto em{font-style:italic;color:#fff;border-bottom:2px solid rgba(255,255,255,.75)}
+  .manifiesto .pie{margin-top:18px;font-family:"Segoe UI",Arial,sans-serif;font-size:.92rem;
+                   color:rgba(255,255,255,.78);max-width:64em;text-shadow:none}
+
+  /* Franja de servicios */
+  .servicios{border-bottom:1px solid var(--linea)}
+  .servicios .env{display:grid;grid-template-columns:repeat(4,1fr);gap:26px;
+                  padding-top:34px;padding-bottom:34px}
+  .servicios h3{margin:0 0 6px;font-size:1rem;color:var(--azul)}
+  .servicios p{margin:0;font-size:.9rem;color:var(--gris)}
+  .num{font-size:.72rem;letter-spacing:1.4px;color:var(--gris);text-transform:uppercase;display:block;margin-bottom:8px}
+
+  /* Cifras */
+  .cifras{background:var(--suave);border-bottom:1px solid var(--linea)}
+  .cifras .env{padding-top:40px;padding-bottom:42px}
+  .cifras h2{margin-bottom:22px}
+  .rejilla{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .tarjeta{background:var(--fondo);border:1px solid var(--linea);border-radius:10px;
+           padding:20px 20px 18px;display:flex;gap:16px;align-items:center}
+  .tarjeta .txt{font-size:.92rem;color:var(--gris);line-height:1.45}
+  .tarjeta .txt b{display:block;color:var(--tinta);font-size:.96rem;margin-bottom:2px}
+  .aro{flex:none;width:74px;height:74px;position:relative}
+  .aro svg{transform:rotate(-90deg)}
+  .aro .val{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+            font-size:1.02rem;font-weight:700;color:var(--azul)}
+  .grande{flex:none;min-width:74px;text-align:center;font-size:2.1rem;font-weight:700;
+          color:var(--azul);line-height:1}
+  .grande small{display:block;font-size:.72rem;font-weight:600;letter-spacing:.6px;
+                text-transform:uppercase;color:var(--gris);margin-top:4px}
+  /* Grafico de barras */
+  .barras{margin:26px 0 6px;border:1px solid var(--linea);border-radius:10px;padding:22px;
+          background:#fff}
+  .barras .tit{font-weight:700;font-size:1rem;color:var(--tinta);margin:0 0 2px}
+  .barras .sub{font-size:.92rem;color:var(--gris);margin:0 0 16px}
+  .barras .ley{display:flex;gap:20px;flex-wrap:wrap;font-size:.78rem;color:var(--gris);
+               margin-bottom:16px}
+  .barras .ley span{display:inline-flex;align-items:center;gap:7px}
+  .barras .cubo{width:11px;height:11px;border-radius:3px;display:inline-block}
+  .barras .cubo.antes{background:var(--ocre)}
+  .barras .cubo.desp{background:var(--azul)}
+  .barras .fila{display:grid;grid-template-columns:96px 1fr 132px;gap:12px;align-items:center;
+                margin-bottom:9px}
+  .barras .ref{font-size:.8rem;color:var(--gris);text-align:right}
+  .barras .carril{position:relative;height:22px}
+  .barras .b{height:100%;border-radius:0 4px 4px 0;min-width:3px}
+  .barras .b.antes{background:var(--ocre)}
+  .barras .b.desp{background:var(--azul)}
+  .barras .v{font-size:.78rem;white-space:nowrap;color:var(--tinta)}
+  .barras .v.cero{color:var(--azul);font-weight:600}
+  .barras hr{border:none;border-top:1px dashed var(--linea);margin:14px 0}
+  .barras .nota{font-size:.8rem;color:var(--gris);margin:16px 0 0}
+
+  h2.ancho{max-width:none;line-height:1.12;margin-bottom:10px;white-space:nowrap}
+  @media (max-width:1060px){ h2.ancho{white-space:normal;font-size:1.45rem} }
+
+  /* Flujo antes / ahora */
+  .flujo{margin:26px 0 6px;border:1px solid var(--linea);border-radius:10px;padding:20px 22px;
+         background:#fff}
+  .flujo .fila{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:14px}
+  .flujo .fila:last-of-type{margin-bottom:0}
+  .flujo .et{font-size:.72rem;text-transform:uppercase;letter-spacing:1.2px;color:var(--gris);
+             width:100%;margin-bottom:2px}
+  .flujo .paso{border:1px solid var(--linea);border-radius:6px;padding:6px 11px;
+               font-size:.86rem;background:var(--suave)}
+  .flujo .paso.fuera{text-decoration:line-through;color:#9aa6b4;border-style:dashed}
+  .flujo .paso.nuevo{border-color:var(--azul);color:var(--azul);font-weight:600;background:#fff}
+  .flujo .fl{color:var(--gris);font-size:.85rem}
+  .flujo .pie{font-size:.8rem;color:var(--gris);margin:16px 0 0}
+
+  /* Franja de actividad */
+  .franja{display:flex;flex-wrap:wrap;border:1px solid var(--linea);border-radius:10px;
+          background:#fff;margin:22px 0 6px;overflow:hidden}
+  .franja .c{flex:1 1 150px;padding:15px 18px;border-right:1px solid var(--linea)}
+  .franja .c:last-child{border-right:none}
+  .franja .n{font-size:1.5rem;font-weight:700;color:var(--tinta);line-height:1.1}
+  .franja .l{font-size:.78rem;color:var(--gris);margin-top:2px}
+  .franja .pie{flex:1 1 100%;border-top:1px solid var(--linea);padding:10px 18px;
+               font-size:.78rem;color:var(--gris)}
+
+  /* Tabla de escenarios */
+  .escenarios{margin:22px 0 6px;border:1px solid var(--linea);border-radius:10px;padding:20px 22px;
+              background:#fff}
+  .escenarios .tit{font-weight:700;font-size:1rem;margin:0 0 2px;color:var(--tinta)}
+  .escenarios .sub{font-size:.92rem;color:var(--gris);margin:0 0 14px}
+  .escenarios table{border-collapse:collapse;width:100%;font-size:.88rem}
+  .escenarios th{text-align:left;font-size:.72rem;text-transform:uppercase;letter-spacing:1px;
+                 color:var(--gris);font-weight:600;padding:0 14px 7px 0;
+                 border-bottom:1px solid var(--linea)}
+  .escenarios td{padding:9px 14px 9px 0;border-bottom:1px solid var(--linea)}
+  .escenarios tr.central td{color:var(--azul);font-weight:700}
+  .escenarios .nota{font-size:.8rem;color:var(--gris);margin:15px 0 0}
+
+  /* Capturas de pantalla */
+  .galeria{margin:26px 0 6px}
+  .galeria figure{margin:0}
+  .galeria a{display:block}
+  .galeria img{display:block;width:100%;height:auto;background:#fff;
+               border:1px solid var(--linea);border-radius:8px;
+               box-shadow:0 2px 16px rgba(18,32,52,.10)}
+  .galeria figcaption{font-size:.82rem;color:var(--gris);margin-top:9px;line-height:1.45}
+  .galeria .rejilla{display:grid;grid-template-columns:1fr 1fr;gap:24px 24px;margin-top:24px}
+  .galeria .rejilla{align-items:start}
+  .galeria .nota{font-size:.78rem;color:var(--gris);margin-top:16px}
+
+  @media (max-width:900px){
+    .portada h1{white-space:normal}
+  }
+  @media (max-width:900px){ .rejilla{grid-template-columns:1fr} }
+
+  .metodo{margin-top:10px;border-top:1px dashed var(--linea);padding-top:8px}
+  .metodo summary{cursor:pointer;font-size:.8rem;color:var(--azul);font-weight:600;
+                  list-style:none;letter-spacing:.2px}
+  .metodo summary::-webkit-details-marker{display:none}
+  .metodo summary:after{content:" ▾"}
+  .metodo[open] summary:after{content:" ▴"}
+  .metodo p{margin:8px 0 0;font-size:.84rem;color:var(--gris);line-height:1.5}
+  .tarjeta{align-items:flex-start}
+  .tarjeta .cuerpo{flex:1}
+
+  /* Secciones */
+  section{padding:46px 0 6px}
+  h2{font-size:1.55rem;color:var(--azul);margin:0 0 6px}
+  .lead{color:var(--gris);margin:0 0 6px}
+  .cabecera{border-bottom:1px solid var(--linea);padding-bottom:15px;margin-bottom:2px}
+  .cifras .cabecera{border-bottom-color:#ccd5e0}
+  .cabecera h2{margin:0 0 7px}
+  .cabecera .lead{font-size:.92rem;margin:0;max-width:none}
+  .cabecera + article{border-top:none}
+  article{padding:40px 0 6px}
+  .subcaso{color:var(--gris);font-size:.92rem;margin:0 0 4px;padding-bottom:14px;
+           border-bottom:1px solid var(--linea)}
+  .subcaso + p{margin-top:18px}
+  article h3{margin:0 0 8px;font-size:1.25rem;color:var(--azul)}
+  .estado{display:inline-block;font-size:.72rem;letter-spacing:.6px;text-transform:uppercase;
+          color:var(--azul);border:1px solid var(--linea);border-radius:999px;
+          padding:3px 10px;margin-bottom:12px;background:var(--suave)}
+  article p{margin:0 0 12px}
+  .dato{font-weight:600}
+  .tec{font-size:.88rem;color:var(--gris)}
+  ul{margin:10px 0 14px;padding-left:20px}
+  li{margin-bottom:9px}
+  figure{margin:16px 0 6px}
+  figure img{width:100%;display:block;border:1px solid var(--linea);border-radius:8px}
+  figcaption{font-size:.82rem;color:var(--gris);margin-top:8px}
+  .nota{font-size:.88rem;color:var(--gris);background:var(--suave);border-radius:8px;padding:16px 18px;margin-top:30px}
+
+  /* Currículum */
+  .cv{border-top:1px solid var(--linea);margin-top:40px;text-align:center}
+  .cv .env{padding-top:40px;padding-bottom:10px}
+  .cv h2{margin-bottom:6px}
+  .cv .lead{margin-bottom:20px}
+  .cv .paginas{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin:30px 0 0;
+               align-items:start}
+  .cv .vista{display:block;border:1px solid var(--linea);border-radius:8px;overflow:hidden;
+             box-shadow:0 6px 22px rgba(20,40,70,.08)}
+  .cv .vista img{width:100%;height:auto;display:block}
+  .cv .pieles{font-size:.78rem;color:var(--gris);margin-top:10px;text-align:center}
+
+  /* Contacto */
+  .contacto{background:var(--suave);border-top:1px solid var(--linea);margin-top:44px}
+  .contacto .env{padding-top:40px;padding-bottom:44px}
+  .contacto h2{margin-bottom:10px}
+  .contacto .vias{display:flex;gap:34px;flex-wrap:wrap;margin-top:16px;font-size:.95rem}
+  .contacto .et{display:block;font-size:.72rem;text-transform:uppercase;letter-spacing:1px;color:var(--gris)}
+  footer{font-size:.85rem;color:var(--gris);padding:18px 0 40px}
+
+  @media (max-width:900px){
+    .portada h1{white-space:normal}
+  }
+  @media (max-width:780px){
+    .portada .texto{max-width:100%}
+    .portada .env{padding-bottom:0;min-height:0;display:block}
+    .portada h1{font-size:2.1rem}
+    .foto{position:static;width:100%;max-width:320px;height:auto;margin:18px auto 0;display:block;object-fit:contain}
+    .servicios .env{grid-template-columns:repeat(2,1fr)}
+    .galeria .rejilla{grid-template-columns:1fr;gap:20px}
+    .cv .paginas{grid-template-columns:1fr;gap:20px}
+    .barra .datos{margin-left:0;gap:18px}
+  }
+</style>
+</head>
+<body>
+<div class="marco">
+
+<div class="barra">
+  <div class="env">
+    <div class="logo">Simón Pérez Rodríguez<span>IA aplicada a la industria</span></div>
+    <div class="datos">
+      <div><span class="et">Escríbeme</span><a href="mailto:ikiteas@gmail.com">ikiteas@gmail.com</a></div>
+      <div><span class="et">Llámame</span><a href="tel:+34649773764">649 773 764</a></div>
+      <div><span class="et">LinkedIn</span><a href="https://linkedin.com/in/simonperezrodriguez">simonperezrodriguez</a></div>
+    </div>
+  </div>
+</div>
+
+<div class="portada">
+  <div class="env">
+    <div class="texto">
+      <h1>Hola, soy Simón</h1>
+      <p class="sub">Llevo la IA a producción en entornos industriales, sin humo y con resultados medidos.</p>
+      <p>Más de diez años en ingeniería de máquinas especiales; los cinco últimos al frente de la
+         oficina técnica, también de la acción comercial. Presupuesto proyectos de hasta un millón
+         de euros, los llevo con los responsables del cliente hasta la puesta en marcha. En el último
+         año, mientras cursaba un máster de inteligencia artificial, he identificado sus casos de
+         uso reales en la ingeniería donde trabajo: implanté lo que salía a cuenta, retiré lo que
+         no.</p>
+      <div class="botones">
+        <a class="boton suave" href="#trayectoria">Cómo llegué aquí</a>
+        <a class="boton suave" href="#metodo">Cómo trabajo</a>
+        <a class="boton principal" href="mailto:ikiteas@gmail.com">Hablemos</a>
+      </div>
+    </div>
+    <img class="foto" src="img/simon-hero.png" alt="Retrato de Simón Pérez Rodríguez">
+  </div>
+</div>
+
+<div class="manifiesto"><div class="env">
+  <p>Analizo el proceso, mido lo que cuesta de verdad, implanto la mejora
+     y dejo puesto el <em>control</em> que la mantiene.</p>
+  <p class="pie">Máquina de estanqueidad diseñada y fabricada por la empresa en la que trabajo. Los
+     sistemas que hay más abajo nacieron para que máquinas como esta se diseñen, se compren y se
+     fabriquen con menos errores.</p>
+</div></div>
+
+<div class="servicios">
+  <div class="env">
+    <div><span class="num">01</span><h3>Detectar el caso</h3><p>Dónde la IA aporta, dónde no, y qué cuesta cada opción.</p></div>
+    <div><span class="num">02</span><h3>Llevarlo a producción</h3><p>De la idea a usuarios reales, integrado con el ERP y el CAD que ya existen.</p></div>
+    <div><span class="num">03</span><h3>Medirlo</h3><p>Contra datos reales y casos no vistos. Los errores silenciosos, aparte.</p></div>
+    <div><span class="num">04</span><h3>Dejarlo funcionando</h3><p>Documentado, formando al usuario y sin depender de quien lo construyó.</p></div>
+  </div>
+</div>
+
+<div class="cifras">
+  <div class="env">
+    <div class="cabecera">
+      <h2>En cifras</h2>
+      <p class="lead">Cada número sale de una medición concreta. Pulsa «cómo se calcula» y lo verás.</p>
+    </div>
+    <div class="rejilla">
+
+      <div class="tarjeta">
+        <div class="aro">
+          <svg width="74" height="74" viewBox="0 0 74 74" aria-hidden="true">
+            <circle cx="37" cy="37" r="31" fill="none" stroke="var(--linea)" stroke-width="7"/>
+            <circle cx="37" cy="37" r="31" fill="none" stroke="var(--azul)" stroke-width="7"
+                    stroke-linecap="round" stroke-dasharray="191 195"/>
+          </svg>
+          <span class="val">≥98 %</span>
+        </div>
+        <div class="txt"><span class="cuerpo"><span class="txt2"><b>Menos errores de datos</b>De dos de cada tres líneas con el identificador
+          mal formado, a ninguna en las líneas del proceso nuevo.</span><details class="metodo"><summary>Cómo se calcula</summary><p>En el histórico, el 66 % de las líneas de pieza llegaban al ERP con el identificador mal formado. En las 240 líneas vigentes de los proyectos hechos ya con la herramienta no hay ninguna. Cero fallos en 240 casos no significa cero errores para siempre: la estadística permite afirmar como máximo un 1,25 % de error real (intervalo de confianza del 95 %). De 66 % a 1,25 % o menos es una reducción de al menos el 98 %.</p><p>Medido el 27 de septiembre de 2026 sobre cuatro fuentes independientes: el árbol consolidado del ERP, el registro de cargas, el log de acciones de la herramienta y el registro del portal de taller. Salvedad honesta: son proyectos distintos antes y después, no el mismo proyecto repetido.</p></details></span></div>
+      </div>
+
+      <div class="tarjeta">
+        <span class="grande">2<small>jornadas</small></span>
+        <div class="txt"><span class="cuerpo"><span class="txt2"><b>De ingeniería, por proyecto</b>El dato se decide una vez en vez de teclearse
+          tres. Unos 74.000 datos dejaron de copiarse a mano en cuatro meses.</span><details class="metodo"><summary>Cómo se calcula</summary><p>Esto es una estimación declarada, no una medición: lo digo antes de dar el número. Lo medido es la base — 136 líneas de media por proyecto, unos 12 campos por línea, cada uno transcrito dos veces en el proceso antiguo (del CAD a la hoja de cálculo, de la hoja al ERP): unos 1.630 datos por proyecto. Lo estimado es el tiempo por dato: 10, 15 o 20 segundos según escenario. Con el central, 15 segundos, salen unas 14,6 horas por proyecto, cerca de dos jornadas.</p><p>El modelo ignora a propósito el coste de los cambios: se registran nueve o diez subidas por proyecto, y antes cada ronda significaba volver a editar a mano en dos sitios. El ahorro real es mayor que el que aquí se publica. Los 74.000 datos sí son recuento directo: 6.137 líneas insertadas entre junio y septiembre de 2026.</p></details></span></div>
+      </div>
+
+      <div class="tarjeta">
+        <div class="aro">
+          <svg width="74" height="74" viewBox="0 0 74 74" aria-hidden="true">
+            <circle cx="37" cy="37" r="31" fill="none" stroke="var(--linea)" stroke-width="7"/>
+            <circle cx="37" cy="37" r="31" fill="none" stroke="var(--azul)" stroke-width="7"
+                    stroke-linecap="round" stroke-dasharray="195 195"/>
+          </svg>
+          <span class="val">100 %</span>
+        </div>
+        <div class="txt"><span class="cuerpo"><span class="txt2"><b>De la producción cubierta</b>Todas las máquinas que se fabrican pasan hoy
+          por ese proceso, no una parte piloto.</span><details class="metodo"><summary>Cómo se calcula</summary><p>Recuento directo: todos los proyectos de máquina lanzados desde la implantación pasan por el proceso. No es una muestra ni un piloto: no hay vía alternativa para dar de alta piezas en el ERP.</p></details></span></div>
+      </div>
+
+      <div class="tarjeta">
+        <span class="grande">0<small>silenciosos</small></span>
+        <div class="txt"><span class="cuerpo"><span class="txt2"><b>Ningún dato aprobado mal</b>En 213 facturas y albaranes reales medidos a
+          ciegas contra el ERP. Lo que no se puede verificar, va a revisión humana.</span><details class="metodo"><summary>Cómo se calcula</summary><p>213 documentos de meses ya cerrados, procesados sin intervención y contrastados campo a campo contra el ERP (proveedor, número, fecha, base, IVA y total). Se contaron aparte los aprobados automáticamente que no coincidían con el ERP: cero. Las plantillas se construyeron con documentos de otros meses, para que la medición fuera a ciegas.</p></details></span></div>
+      </div>
+
+      <div class="tarjeta">
+        <span class="grande">782<small>ofertas</small></span>
+        <div class="txt"><span class="cuerpo"><span class="txt2"><b>Conocimiento recuperable</b>Veinte años de ofertas técnicas indexados para
+          buscar por parecido, no por nombre de archivo.</span><details class="metodo"><summary>Cómo se calcula</summary><p>Recuento de ofertas históricas indexadas en el sistema de búsqueda (782). Cada oferta se convierte en un vector para la búsqueda por parecido; los datos de negocio quedan en la base relacional.</p></details></span></div>
+      </div>
+
+      <div class="tarjeta">
+        <span class="grande">19<small>paneles</small></span>
+        <div class="txt"><span class="cuerpo"><span class="txt2"><b>Dirección con datos de ayer</b>Costes, cartera, tesorería y capacidad,
+          regenerados solos cada noche desde el ERP.</span><details class="metodo"><summary>Cómo se calcula</summary><p>Recuento de paneles publicados por el proceso nocturno (19) y comprobación diaria de que el refresco termina: el propio sistema deja constancia de cuántos extractores y paneles se han generado, y avisa si falta alguno.</p></details></span></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="env">
+
+<section>
+  <div class="cabecera">
+    <h2 class="ancho">Siete sistemas propios, cada uno con el problema que resolvía</h2>
+    <p class="lead">Se analizó, se midió, se diseñó, se mejoró y por último se verificó que cumplía
+       la especificación.</p>
+  </div>
+
+  <article>
+    <span class="estado">Prototipo · web, escritorio y Android</span>
+    <h3>Decidir qué automatizar, y qué no</h3>
+    <p class="subcaso">Inventario de tareas, puntuación y decisión: eliminar, delegar, automatizar o proteger.</p>
+    <p>Cuando una empresa quiere automatizar, la primera pregunta no es «cómo», sino «qué». Y casi
+       siempre se responde por intuición, o por la tarea que más ruido hizo ese mes. Por eso hay
+       tantos proyectos que automatizan lo que se veía, no lo que pesaba.</p>
+    <p>Esta herramienta hace el inventario primero. La persona que hace el trabajo apunta lo que
+       hace —a mano, o con un aviso cada X minutos— y cada tarea se puntúa por impacto, frecuencia,
+       facilidad de automatización y riesgo. De ahí sale una prioridad sobre 100 y una acción
+       concreta: <span class="dato">eliminar, delegar, automatizar, automatizar en parte o
+       proteger</span>.</p>
+    <p>Lo más útil no son las candidatas, son los <span class="dato">falsos positivos</span>: tareas
+       que puntúan alto pero no deben automatizarse —interrupciones, criterio humano, trato con el
+       cliente—. Marcarlas antes de invertir es lo que separa un plan de automatización de una lista
+       de deseos.</p>
+    <p>El informe para dirección sale de la propia herramienta: horas inventariadas, horas
+       automatizables, horas al año recuperables y lo que valen al coste hora que se introduzca.
+       Y la fórmula está escrita en pantalla, a la vista del cliente: no hay caja negra ni un modelo
+       decidiendo por detrás, hay aritmética que se puede discutir en una reunión.</p>
+    <p class="tec">Una sola página HTML/CSS/JS sin librerías ni servidor: todo se ejecuta en el
+       dispositivo y los datos no salen de él. Versión de escritorio en Python empaquetada a
+       ejecutable y versión Android. <strong>Es un prototipo funcional</strong>: los números de las
+       capturas son un juego de quince tareas de ejemplo. Está construido y funciona; el ahorro real
+       con usuarios todavía no está medido, y hasta que lo esté no pondré aquí una cifra.</p>
+
+    <div class="galeria">
+      <figure>
+        <a href="img/consultoria-01-inventario.png" target="_blank" rel="noopener">
+          <img src="img/consultoria-01-inventario.png" alt="Captura de actividad y panel de control de la herramienta"></a>
+        <figcaption>La herramienta entera: se captura la actividad arriba —a mano o con un aviso
+          cada X minutos— y el panel resume lo inventariado, lo automatizable, lo recuperable al año
+          y los falsos positivos.</figcaption>
+      </figure>
+      <div class="rejilla">
+        <figure>
+          <a href="img/consultoria-02-priorizacion.png" target="_blank" rel="noopener">
+            <img src="img/consultoria-02-priorizacion.png" alt="Tabla de tareas priorizadas con la acción recomendada"></a>
+          <figcaption>Cada tarea con su puntuación y su acción. En rojo, los falsos positivos:
+            puntúan alto, pero automatizarlos sería un error.</figcaption>
+        </figure>
+        <figure>
+          <a href="img/consultoria-03-informe.png" target="_blank" rel="noopener">
+            <img src="img/consultoria-03-informe.png" alt="Informe de optimización para dirección"></a>
+          <figcaption>El informe que se lleva a dirección, con la fórmula de priorización explicada
+            debajo.</figcaption>
+        </figure>
+      </div>
+      <p class="nota">Capturas con el conjunto de ejemplo de la propia herramienta.</p>
+  </article>
+
+  <article>
+    <span class="estado">En producción</span>
+    <h3>Del modelo 3D al ERP, sin reescribir un dato</h3>
+    <p class="subcaso">Los datos de cada pieza pasan del CAD al ERP validados contra reglas, sin volver a teclearse.</p>
+    <p>Los datos de miles de piezas se escribían tres veces: en el CAD, en una hoja de cálculo, en
+       el ERP. Cada copia era una oportunidad de error, y ahí un error no se queda en el papel: una
+       cantidad mal copiada, una referencia cambiada, un material o un tratamiento que no eran los
+       del plano, o una pieza que nadie llegaba a pedir. Todo eso aparece semanas después, en el
+       taller, con la máquina ya empezada. <span class="dato">Los fallos no se reparten: se acumulan
+       al final</span>, justo donde ya no hay margen ni de plazo ni de coste, con el cliente
+       esperando la máquina.</p>
+    <p>Diseñé un proceso guiado que valida cada dato contra un sistema de reglas antes de grabarlo.
+       Si algo no cuadra, no pasa.</p>
+    <p><span class="dato">Al menos un 98 % menos de errores de datos</span>, con la medición hecha
+       sobre cuatro fuentes independientes del ERP. Cada dato pasó de manipularse tres veces a
+       decidirse una sola: unas <span class="dato">dos jornadas de ingeniería por proyecto</span>
+       que dejan de irse en teclear. Cubre el 100 % de las máquinas que se fabrican.</p>
+    <div class="barras">
+      <p class="tit">Piezas con el identificador mal formado al llegar al ERP</p>
+      <p class="sub">Porcentaje de líneas vigentes por proyecto. Los proyectos van sin nombre a
+        propósito; los datos son reales, medidos el 27 de septiembre de 2026.</p>
+      <div class="ley">
+        <span><span class="cubo antes"></span>Antes del control automático</span>
+        <span><span class="cubo desp"></span>Con la herramienta</span>
+      </div>
+
+      <div class="fila"><div class="ref">Proyecto A</div>
+        <div class="carril"><div class="b antes" style="width:96.8%"></div></div>
+        <div class="v">96,8 % · 151/156</div></div>
+      <div class="fila"><div class="ref">Proyecto B</div>
+        <div class="carril"><div class="b antes" style="width:95.5%"></div></div>
+        <div class="v">95,5 % · 85/89</div></div>
+      <div class="fila"><div class="ref">Proyecto C</div>
+        <div class="carril"><div class="b antes" style="width:95.0%"></div></div>
+        <div class="v">95,0 % · 133/140</div></div>
+      <div class="fila"><div class="ref">Proyecto D</div>
+        <div class="carril"><div class="b antes" style="width:70.4%"></div></div>
+        <div class="v">70,4 % · 200/284</div></div>
+
+      <hr>
+
+      <div class="fila"><div class="ref">Proyecto E</div>
+        <div class="carril"><div class="b desp" style="width:0.5%"></div></div>
+        <div class="v cero">0 % · 0/142</div></div>
+      <div class="fila"><div class="ref">Proyecto F</div>
+        <div class="carril"><div class="b desp" style="width:0.5%"></div></div>
+        <div class="v cero">0 % · 0/98</div></div>
+
+      <p class="nota">Se cuentan solo las posiciones vigentes —la última versión consolidada de
+        cada referencia— para no contar dos veces lo mismo. Los proyectos antiguos que aún no
+        llevaban identificador quedan fuera de la comparación. Un proyecto de transición conserva
+        identificadores heredados de antes del control: quedará limpio al volver a consolidarse.</p>
+    </div>
+
+    <div class="flujo">
+      <div class="fila">
+        <span class="et">Antes</span>
+        <span class="paso">Teclear en el CAD</span><span class="fl">→</span>
+        <span class="paso fuera">Copiar a una hoja de cálculo</span><span class="fl">→</span>
+        <span class="paso fuera">Maquetar la hoja</span><span class="fl">→</span>
+        <span class="paso fuera">Compras lo vuelve a teclear en el ERP</span><span class="fl">→</span>
+        <span class="paso fuera">Cada cambio, por triplicado</span>
+      </div>
+      <div class="fila">
+        <span class="et">Ahora</span>
+        <span class="paso nuevo">Decidir una vez en la aplicación</span><span class="fl">→</span>
+        <span class="paso nuevo">Hoja generada (un clic)</span><span class="fl">→</span>
+        <span class="paso nuevo">ERP (un clic)</span><span class="fl">→</span>
+        <span class="paso nuevo">Un cambio = volver a subir, en minutos</span>
+      </div>
+      <p class="pie">De tres manipulaciones por dato a una. Lo tachado es trabajo que ya no existe,
+        no trabajo que se hace más rápido.</p>
+    </div>
+
+    <div class="franja">
+      <div class="c"><div class="n">86</div><div class="l">subidas al ERP registradas</div></div>
+      <div class="c"><div class="n">8.248</div><div class="l">líneas de lista de materiales procesadas</div></div>
+      <div class="c"><div class="n">228</div><div class="l">validaciones completas de piezas</div></div>
+      <div class="c"><div class="n">1.213</div><div class="l">líneas auditadas en el ERP</div></div>
+      <div class="pie">Actividad real de junio a septiembre de 2026, tomada del registro de cargas y
+        del log del servidor. No es una maqueta ni una prueba de concepto: es lo que ha pasado por
+        el sistema.</div>
+    </div>
+
+    <div class="escenarios">
+      <p class="tit">Qué pasa si no te crees mi número</p>
+      <p class="sub">Lo medido es el volumen: 136 líneas de media por proyecto, unos 12 campos por
+        línea, cada dato transcrito dos veces. Lo estimado es solo el tiempo por dato. Copiar y
+        pegar en seco son unos cinco segundos; lo que tarda de verdad es localizar la pieza,
+        comprobar que es la que toca y retomar la tarea donde la dejaste. Por eso doy cuatro
+        escenarios en vez de uno:</p>
+      <table>
+        <tr><th>Escenario</th><th>Tiempo por dato</th><th>Ahorro por proyecto</th></tr>
+        <tr><td>Solo el tecleo, sin buscar ni comprobar</td><td>5 s</td><td>5,5 h</td></tr>
+        <tr><td>Conservador</td><td>10 s</td><td>10,1 h</td></tr>
+        <tr class="central"><td>Central (el que publico)</td><td>15 s</td><td>14,6 h</td></tr>
+        <tr><td>Alto</td><td>20 s</td><td>19,1 h</td></tr>
+      </table>
+      <p class="nota">El ahorro incluye la transcripción doble y la maquetación de la hoja, y
+        descuenta el tiempo de operar la herramienta. Aun contando solo el tecleo en seco —el
+        supuesto más duro contra mi propia cifra— son cinco horas y media por proyecto. Y el modelo
+        deja fuera los cambios: se registran nueve o diez revisiones por proyecto, y antes cada
+        ronda obligaba a editar a mano en dos sitios.</p>
+      <p class="nota">Hay un coste que no cabe en esta tabla. Estas horas no se hacen del tirón: se
+        trocean con llamadas, reuniones y urgencias, y cada vez que vuelves hay que reencontrar por
+        dónde ibas. <span class="dato">Una tarea tediosa que se alarga es donde aparecen los
+        fallos</span>, y es también lo que quema a la persona que la hace. Esa parte no la he
+        medido, pero cualquiera que haya estado en una oficina técnica sabe que existe.</p>
+    </div>
+
+    <p class="tec">Aplicación de escritorio · API de CAD paramétrico · ERP · reglas deterministas.
+       Decisión consciente: aquí descarté un modelo de lenguaje. En un pedido de compra,
+       «casi siempre acierta» no sirve.</p>
+  </article>
+
+  <article>
+    <span class="estado">En implantación · más de 20 personas</span>
+    <h3>Saber lo que cuesta un proyecto mientras se hace</h3>
+    <p class="subcaso">El sistema de gestión de toda la empresa: horas, coste real, planificación
+       anual y ausencias del equipo en una sola herramienta.</p>
+    <p>La empresa se gestionaba con hojas de cálculo sueltas y tres herramientas que no se hablaban
+       entre sí. Nadie sabía a tiempo real cuánto llevaba costando un proyecto.</p>
+    <ul>
+      <li><span class="dato">Horas y coste real.</span> Cada persona imputa su tiempo a un proyecto
+          y a un centro de coste, con el coste hora de su categoría. Así se sabe lo que lleva
+          costando un proyecto mientras se hace, no tres meses después.</li>
+      <li><span class="dato">Planificación anual por semanas.</span> Todos los proyectos con sus
+          fases, desde la recepción del pedido hasta la entrega, con las vacaciones del equipo
+          integradas y versiones guardadas para comparar lo planificado con lo real.</li>
+      <li><span class="dato">Intervenciones y ausencias.</span> Calendario anual del equipo, con las
+          ausencias tomadas del control horario como fuente única, para que nadie planifique sobre
+          alguien que no está.</li>
+      <li><span class="dato">Ofertas y materiales.</span> Las ofertas se sincronizan con el ERP y el
+          estado del material de cada proyecto se consulta desde la propia herramienta.</li>
+    </ul>
+    <p>Encima de todo eso se publican los cuadros de mando de dirección. Es el sistema que conecta
+       lo que se planifica, lo que se trabaja y lo que cuesta.</p>
+    <p class="tec">Aplicación web · base de datos · integración con el ERP · desplegada en servidor
+       con servicio permanente y copias de seguridad automáticas.</p>
+
+    <div class="galeria">
+      <figure>
+        <a href="img/planner-02-planificacion.png" target="_blank" rel="noopener">
+          <img src="img/planner-02-planificacion.png" alt="Planificación anual por semanas de todos los proyectos"></a>
+        <figcaption>Planificación anual: cada proyecto con sus fases semana a semana, las vacaciones
+          del equipo integradas y versiones guardadas para comparar lo planificado con lo real.</figcaption>
+      </figure>
+      <div class="rejilla">
+        <figure>
+          <a href="img/planner-04-fichajes.png" target="_blank" rel="noopener">
+            <img src="img/planner-04-fichajes.png" alt="Imputación de horas a proyecto"></a>
+          <figcaption>Imputación de horas a proyecto, tarea y centro de coste. De ahí sale el coste
+            real mientras el proyecto se hace.</figcaption>
+        </figure>
+        <figure>
+          <a href="img/planner-03-intervenciones.png" target="_blank" rel="noopener">
+            <img src="img/planner-03-intervenciones.png" alt="Calendario anual de intervenciones"></a>
+          <figcaption>Intervenciones del equipo en un calendario anual, con el control horario como
+            fuente única de las ausencias.</figcaption>
+        </figure>
+        <figure>
+          <a href="img/planner-05-vacaciones.png" target="_blank" rel="noopener">
+            <img src="img/planner-05-vacaciones.png" alt="Gestión de vacaciones del equipo"></a>
+          <figcaption>Vacaciones y ausencias del año, para que nadie programe trabajo sobre alguien
+            que no está.</figcaption>
+        </figure>
+        <figure>
+          <a href="img/planner-01-acceso.png" target="_blank" rel="noopener">
+            <img src="img/planner-01-acceso.png" alt="Pantalla de acceso del sistema"></a>
+          <figcaption>Acceso con usuario propio: cada persona ve lo suyo y los responsables, lo de
+            su equipo.</figcaption>
+        </figure>
+      </div>
+      <p class="nota">Capturas de la herramienta en uso, con los datos de personas, clientes y
+        proyectos ocultos.</p>
+  </article>
+
+  <article>
+    <span class="estado">En implantación</span>
+    <h3>Control de material y tratamientos para el taller</h3>
+    <p class="subcaso">Qué pieza está pedida, recibida o en tratamiento, con su plano al lado y sin licencia de CAD.</p>
+    <p>Una máquina se monta con cientos de piezas que llegan de proveedores distintos y algunas
+       pasan por tratamientos externos. El taller no sabía qué tenía hasta que se ponía a montar, y
+       las faltas aparecían tarde, con la máquina ya empezada.</p>
+    <p>Hice una aplicación web para el taller, con el estado de cada pieza: pedida, recibida, enviada
+       a tratamiento, de vuelta. Filtra por proyecto, por tipo de tratamiento o por lo que falta,
+       y muestra el plano de la pieza al lado <span class="dato">sin abrir el CAD ni gastar una
+       licencia</span>. Los datos de autorización y recepción salen del ERP; los planos los localiza
+       sola siguiendo el estándar de carpetas de la empresa.</p>
+    <p>Así se ve de un vistazo qué falta antes de empezar el montaje, y se pueden montar los
+       subconjuntos que sí están completos en lugar de esperar a tenerlo todo.</p>
+    <p class="tec">Aplicación web servida por HTTPS en la red interna · consultas al ERP en solo
+       lectura · usuarios compartidos con el sistema de gestión.</p>
+
+    <div class="galeria">
+      <figure>
+        <a href="img/taller-01-material.png" target="_blank" rel="noopener">
+          <img src="img/taller-01-material.png" alt="Control de material del proyecto: pedido, autorizado, albaranado y recibido"></a>
+        <figcaption>Estado de cada pieza del proyecto: pedida, autorizada, albaranada, recibida en
+          taller, con su tratamiento y quién la envió. Los conjuntos completos se ven de un vistazo.</figcaption>
+      </figure>
+      <div class="rejilla">
+        <figure>
+          <a href="img/taller-02-tratamientos.png" target="_blank" rel="noopener">
+            <img src="img/taller-02-tratamientos.png" alt="Control de tratamientos con el plano de la pieza al lado"></a>
+          <figcaption>Material pendiente, en tratamiento y recibido, en tres columnas. El plano de la
+            pieza se abre al lado sin gastar una licencia de CAD.</figcaption>
+        </figure>
+        <figure>
+          <a href="img/taller-03-proyectos.png" target="_blank" rel="noopener">
+            <img src="img/taller-03-proyectos.png" alt="Gestión de proyectos activos y cerrados"></a>
+          <figcaption>Qué proyectos siguen abiertos, cuáles se cierran solos según el ERP y cuáles se
+            fuerzan a mano.</figcaption>
+        </figure>
+      </div>
+      <p class="nota">Capturas reales con las referencias, denominaciones y nombres de personas
+        ocultos.</p>
+    </div>
+  </article>
+
+  <article>
+    <span class="estado">Piloto · en medición y mejora</span>
+    <h3>Lectura automática de facturas y albaranes de compra</h3>
+    <p class="subcaso">Los documentos de compra se leen solos y se contrastan contra el ERP antes
+       de aprobar nada. En proceso de medición y mejora.</p>
+    <p>Documentos escaneados, varios dentro de un mismo PDF, con adjuntos intercalados y facturas
+       extranjeras mezcladas. El reto no era leer, era decidir qué número es el total y poder
+       demostrarlo.</p>
+    <p>Dos formas independientes de obtener los importes: una anclada en la aritmética del documento
+       y otra en su posición en la página. Solo se aprueba automáticamente lo que ambas confirman;
+       el resto va a revisión de una persona.</p>
+    <p>Medido a ciegas sobre <span class="dato">213 documentos reales</span> de meses cerrados,
+       contrastados campo a campo contra el ERP: acierta siempre el número de documento,
+       el 91 % de los importes y <span class="dato">no ha aprobado ni un documento con un dato
+       incorrecto</span>. La automatización sin intervención pasó del 2 % al 34,7 % en una
+       iteración; el trabajo continúa.</p>
+    <p class="tec">OCR local · modelos de visión y lenguaje en local · contraste contra el ERP.
+       Todo el procesamiento en la máquina: coste por uso cero.</p>
+  </article>
+
+  <article>
+    <span class="estado">Funcional</span>
+    <h3>Búsqueda semántica sobre 782 ofertas técnicas</h3>
+    <p class="subcaso">Veinte años de ofertas consultables por parecido, no por nombre de archivo.</p>
+    <p>Veinte años de ofertas de máquinas a medida eran conocimiento imposible de consultar:
+       cada nueva oferta se hacía de memoria o buscando a mano en carpetas.</p>
+    <p>Indexé el histórico para poder preguntar «¿qué hicimos en un caso parecido a este?».
+       Arquitectura híbrida: base vectorial para el parecido y base relacional para precios,
+       clientes y fechas, de forma que cambiar un dato de negocio no obliga a reindexar nada.</p>
+    <p class="tec">RAG · embeddings multilingües · base vectorial + base relacional.</p>
+  </article>
+
+  <article>
+    <span class="estado">En producción</span>
+    <h3>Diecinueve cuadros de mando sobre el ERP</h3>
+    <p class="subcaso">Costes, cartera, tesorería y capacidad regenerados cada noche, sin que nadie los prepare.</p>
+    <p>Dirección tomaba decisiones con hojas de cálculo sueltas y datos de semanas atrás.</p>
+    <p>Construí una suite de paneles que se genera sola cada noche a partir del ERP y se publica
+       dentro del sistema de gestión: costes por proyecto, cartera, tesorería, coste-beneficio por
+       sección, capacidad del equipo y conciliación pieza a pieza. Incluye alertas de calidad del
+       dato, porque un cuadro de mando que enseña una cifra mal hace más daño que no tenerlo.</p>
+    <p class="tec">Python · SQL sobre el ERP en solo lectura · publicación automática en servidor.</p>
+  </article>
+</section>
+
+<section id="trayectoria">
+  <div class="cabecera">
+    <h2>Cómo llegué hasta aquí</h2>
+    <p class="lead">De las compras y la logística a dirigir proyectos de máquina completos, pasando
+       por el diseño, las ofertas y el taller.</p>
+  </div>
+  <p>Empecé en 2013 en la gestión de compras, logística e informática, con la implantación de un ERP
+     desarrollado a medida. En cuanto tuve la oportunidad pasé al diseño mecánico en 3D de máquinas
+     especiales.</p>
+  <p>Cuando la gestión de proyectos y el diseño estuvieron bajo control, el siguiente paso fue el
+     proceso de ofertas: mejorarlo primero, encargarme después de las ofertas técnicas. Planificar
+     los proyectos, diseñarlos de principio a fin, dirigirlos técnicamente: ahí es donde se entiende
+     cómo se enlazan los departamentos de una ingeniería, desde el planteamiento hasta la validación
+     final del cliente.</p>
+  <p>Por el camino he formado a diseñadores y comerciales. He estado en el taller en montajes,
+     ajustes y puestas en marcha. <span class="dato">No hay atajo para entender un negocio
+     industrial: hay que vivirlo.</span></p>
+  <p>De forma transversal, lo que siempre me ha interesado es la mejora de los procesos en los que
+     participaba. Estando dentro del ciclo se puede analizar el proceso, medirlo, rediseñarlo.
+     Desde fuera solo se puede opinar sobre él.</p>
+</section>
+
+<section id="metodo">
+  <div class="cabecera">
+    <h2>Cómo trabajo</h2>
+    <p class="lead">Las reglas que no me salto cuando llevo un sistema a producción.</p>
+  </div>
+  <ul>
+    <li><span class="dato">Medir antes de escalar.</span> Cada sistema se mide contra los datos
+        reales de la empresa y sobre casos que no se usaron para construirlo. Lo que más vigilo son
+        los errores silenciosos: los que el sistema da por buenos y están mal.</li>
+    <li><span class="dato">Reglas donde no se puede fallar, modelos donde aportan.</span> Lo que
+        acaba en un pedido o en la contabilidad se valida de forma determinista. El modelo propone;
+        la verificación decide.</li>
+    <li><span class="dato">Quitar lo que no aporta.</span> En un sistema de clasificación de correo
+        medí que de 2.057 clasificaciones que se pagaban, 2.032 no las revisaba nadie. Lo retiré y
+        lo rehíce para funcionar en local, sin coste por uso.</li>
+    <li><span class="dato">Integrar, no sustituir.</span> Todo se apoya en el ERP y el CAD que la
+        empresa ya tenía. Nadie ha tenido que cambiar de herramienta para usarlo.</li>
+    <li><span class="dato">Construir con IA, con método.</span> Desarrollo asistido por IA con
+        varias sesiones en paralelo, una por proyecto, coordinadas por una base de conocimiento
+        común y con reglas de seguridad y aprobación.</li>
+  </ul>
+  <p class="tec">Python · FastAPI · PostgreSQL · MySQL · SQL · C# .NET · API de SolidWorks ·
+     integración con ERP · IA generativa y LLM · RAG · agentes · OCR · modelos locales (Ollama) ·
+     Git · Windows Server.</p>
+
+  <p class="nota">Los proyectos descritos se desarrollaron para una ingeniería de máquinas
+     especiales. Por respeto a su información y a la de sus clientes, esta página no incluye
+     nombres ni datos económicos: solo el planteamiento, las decisiones y los resultados medidos.
+     Puedo explicar cualquiera de ellos con más detalle en una conversación.</p>
+</section>
+
+</div>
+
+<div class="cv">
+  <div class="env">
+    <h2>¿Quieres verlo en un folio?</h2>
+    <p class="lead">El currículum completo, con la trayectoria y las herramientas.</p>
+    <a class="boton" href="cv/CV-Simon-Perez-Rodriguez.pdf" download>Descargar currículum (PDF)</a>
+    <div class="paginas">
+      <a class="vista" href="cv/CV-Simon-Perez-Rodriguez.pdf">
+        <img src="img/cv-pagina1.png" alt="Primera página del currículum de Simón Pérez Rodríguez">
+      </a>
+      <a class="vista" href="cv/CV-Simon-Perez-Rodriguez.pdf">
+        <img src="img/cv-pagina2.png" alt="Segunda página del currículum de Simón Pérez Rodríguez">
+      </a>
+    </div>
+    <p class="pieles">Las dos páginas del currículum. Pulsa en cualquiera para abrirlo.</p>
+  </div>
+</div>
+
+<div class="contacto">
+  <div class="env">
+    <h2>Hablemos</h2>
+    <p class="lead">Busco un puesto consultivo de IA aplicada a la industria, en remoto.
+       Disponible con un mes de preaviso.</p>
+    <div class="vias">
+      <div><span class="et">Correo</span><a href="mailto:ikiteas@gmail.com">ikiteas@gmail.com</a></div>
+      <div><span class="et">Teléfono</span><a href="tel:+34649773764">649 773 764</a></div>
+      <div><span class="et">LinkedIn</span><a href="https://linkedin.com/in/simonperezrodriguez">simonperezrodriguez</a></div>
+      <div><span class="et">Dónde</span>Zaragoza · remoto</div>
+    </div>
+    <footer>Simón Pérez Rodríguez · Zaragoza, España</footer>
+  </div>
+</div>
+
+</div>
+</body>
+</html>

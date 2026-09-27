@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<title>Mock — Control de material y tratamientos</title>
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;background:#eef1f6;font:13px/1.45 "Segoe UI",Arial,sans-serif;color:#22272e}
+  .app{width:1180px;margin:0;background:#fff}
+  .top{background:#14396e;color:#fff;padding:10px 18px;display:flex;align-items:center;gap:18px}
+  .marca{font-weight:700;letter-spacing:.5px;font-size:15px}
+  .top .lema{font-size:11px;opacity:.75}
+  .top .der{margin-left:auto;display:flex;gap:10px;align-items:center;font-size:11px}
+  .chip{border:1px solid rgba(255,255,255,.45);border-radius:4px;padding:3px 8px}
+  nav{display:flex;border-bottom:2px solid #14396e;background:#f7f9fc}
+  nav div{padding:10px 22px;font-weight:600;color:#44506a;border-right:1px solid #e3e8f0}
+  nav div.on{background:#fff;color:#14396e;border-top:3px solid #e8a33d;margin-top:-1px}
+  .filtros{display:flex;gap:10px;padding:12px 18px;align-items:center;border-bottom:1px solid #e3e8f0;flex-wrap:wrap}
+  .filtros label{font-size:11px;color:#69748a;display:block;margin-bottom:3px}
+  .campo{border:1px solid #cfd8e6;border-radius:5px;padding:5px 9px;background:#fff;min-width:150px}
+  .btn{background:#14396e;color:#fff;border-radius:5px;padding:7px 14px;font-weight:600}
+  .btn.claro{background:#fff;color:#14396e;border:1px solid #14396e}
+  .cuerpo{display:flex}
+  table{border-collapse:collapse;width:100%;font-size:12.5px}
+  th{background:#f2f5fa;text-align:left;padding:8px 10px;color:#44506a;border-bottom:1px solid #dbe2ee;font-size:11.5px;text-transform:uppercase;letter-spacing:.3px}
+  td{padding:7px 10px;border-bottom:1px solid #eef1f6}
+  tr:nth-child(even) td{background:#fafbfd}
+  .est{display:inline-block;border-radius:999px;padding:2px 9px;font-size:11px;font-weight:600}
+  .ok{background:#e3f4e7;color:#1d6b32}.trat{background:#fdf1dc;color:#8a5b12}
+  .pend{background:#fde6e6;color:#8f2020}.rec{background:#e5eefb;color:#1d4b8f}
+  .plano{width:330px;border-left:1px solid #e3e8f0;padding:12px}
+  .plano h4{margin:0 0 8px;font-size:12px;color:#44506a;text-transform:uppercase;letter-spacing:.4px}
+  .marco{border:1px solid #cfd8e6;height:300px;background:
+     repeating-linear-gradient(0deg,#fff,#fff 24px,#f4f6fa 24px,#f4f6fa 25px),
+     repeating-linear-gradient(90deg,#fff,#fff 24px,#f4f6fa 24px,#f4f6fa 25px);
+     position:relative}
+  .pieza{position:absolute;left:70px;top:70px;width:150px;height:110px;border:2px solid #7f8da5;border-radius:6px}
+  .pieza:after{content:"";position:absolute;left:28px;top:34px;width:42px;height:42px;border:2px solid #7f8da5;border-radius:50%}
+  .cota{position:absolute;left:70px;top:196px;width:150px;border-top:1px solid #9aa6bb}
+  .cota span{position:absolute;left:58px;top:-9px;background:#fff;padding:0 4px;font-size:10px;color:#69748a}
+  .pie{padding:8px 18px;font-size:11px;color:#69748a;border-top:1px solid #e3e8f0}
+</style></head>
+<body>
+<div class="app">
+  <div class="top">
+    <span class="marca">CONTROL DE TALLER</span>
+    <span class="lema">Material y tratamientos · datos del ERP</span>
+    <span class="der"><span class="chip">4 proyectos activos</span><span class="chip">128 piezas</span><span class="chip">usuario: taller</span></span>
+  </div>
+  <nav><div class="on">Control de material</div><div>Control de tratamientos</div><div>Proyectos</div></nav>
+  <div class="filtros">
+    <div><label>Proyecto</label><div class="campo">00042.26 — Máquina ejemplo</div></div>
+    <div><label>Estado</label><div class="campo">Pendiente de recibir</div></div>
+    <div><label>Tratamiento</label><div class="campo">Todos</div></div>
+    <div><label>Denominación</label><div class="campo">Buscar…</div></div>
+    <div style="margin-left:auto;display:flex;gap:8px"><span class="btn claro">Enviar a tratamiento</span><span class="btn">Recibir piezas</span></div>
+  </div>
+  <div class="cuerpo">
+    <div style="flex:1">
+      <table>
+        <tr><th>Pieza</th><th>Denominación</th><th>Proveedor</th><th>Tratamiento</th><th>Estado</th><th>Pedido</th></tr>
+        <tr><td>00042.26.01.014</td><td>Placa base utillaje</td><td>Mecanizados ejemplo</td><td>Nitrurado</td><td><span class="est trat">En tratamiento</span></td><td>PC-1042</td></tr>
+        <tr><td>00042.26.01.021</td><td>Soporte cilindro</td><td>Mecanizados ejemplo</td><td>—</td><td><span class="est ok">Recibida</span></td><td>PC-1042</td></tr>
+        <tr><td>00042.26.02.003</td><td>Eje guía Ø25</td><td>Suministros ejemplo</td><td>Temple</td><td><span class="est pend">Pendiente</span></td><td>PC-1051</td></tr>
+        <tr><td>00042.26.02.008</td><td>Brida sujeción</td><td>Mecanizados ejemplo</td><td>Zincado</td><td><span class="est rec">Enviada</span></td><td>PC-1051</td></tr>
+        <tr><td>00042.26.03.001</td><td>Bancada soldada</td><td>Calderería ejemplo</td><td>Pintura</td><td><span class="est trat">En tratamiento</span></td><td>PC-1049</td></tr>
+        <tr><td>00042.26.03.012</td><td>Tapa registro</td><td>Mecanizados ejemplo</td><td>—</td><td><span class="est ok">Recibida</span></td><td>PC-1049</td></tr>
+        <tr><td>00042.26.04.005</td><td>Pinza de amarre</td><td>Comercial ejemplo</td><td>—</td><td><span class="est pend">Pendiente</span></td><td>PC-1055</td></tr>
+        <tr><td>00042.26.04.009</td><td>Casquillo bronce</td><td>Comercial ejemplo</td><td>—</td><td><span class="est ok">Recibida</span></td><td>PC-1055</td></tr>
+      </table>
+    </div>
+    <div class="plano">
+      <h4>Plano de la pieza seleccionada</h4>
+      <div class="marco">
+        <div class="pieza"></div>
+        <div class="cota"><span>150</span></div>
+      </div>
+      <p style="font-size:11px;color:#69748a;margin:8px 0 0">00042.26.01.014 · Placa base utillaje · se abre sin licencia de CAD</p>
+    </div>
+  </div>
+  <div class="pie">Ejemplo con datos inventados: proyectos, piezas y proveedores no corresponden a ningún caso real.</div>
+</div>
+</body></html>
