@@ -763,9 +763,7 @@
     <li><span class="dato">Reglas donde no se puede fallar, modelos donde aportan.</span> Lo que
         acaba en un pedido o en la contabilidad se valida de forma determinista. El modelo propone;
         la verificación decide.</li>
-    <li><span class="dato">Quitar lo que no aporta.</span> En un sistema de clasificación de correo
-        medí que de 2.057 clasificaciones que se pagaban, 2.032 no las revisaba nadie. Lo retiré y
-        lo rehíce para funcionar en local, sin coste por uso.</li>
+    <li><span class="dato">Seguro antes que rápido.</span> Frené un clasificador de correo antes de producción para rehacer su arquitectura: dividí el proceso en tareas y aislé el modelo con salida en JSON estructurado, de forma que un correo no fiable no pudiera disparar una acción crítica.</li>
     <li><span class="dato">Integrar, no sustituir.</span> Todo se apoya en el ERP y el CAD que la
         empresa ya tenía. Nadie ha tenido que cambiar de herramienta para usarlo.</li>
     <li><span class="dato">Construir con IA, con método.</span> Desarrollo asistido por IA con
