@@ -356,9 +356,8 @@
       </div>
 
       <div class="tarjeta">
-        <span class="grande">0<small>silenciosos</small></span>
-        <div class="txt"><span class="cuerpo"><span class="txt2"><b>Ningún dato aprobado mal</b>En 213 facturas y albaranes reales medidos a
-          ciegas contra el ERP. Lo que no se puede verificar, va a revisión humana.</span><details class="metodo"><summary>Cómo se calcula</summary><p>213 documentos de meses ya cerrados, procesados sin intervención y contrastados campo a campo contra el ERP (proveedor, número, fecha, base, IVA y total). Se contaron aparte los aprobados automáticamente que no coincidían con el ERP: cero. Las plantillas se construyeron con documentos de otros meses, para que la medición fuera a ciegas.</p></details></span></div>
+        <span class="grande">0<small>errores en 88</small></span>
+        <div class="txt"><span class="cuerpo"><span class="txt2"><b>Ningún error en lo aprobado y contrastado</b>En 88 documentos aprobados automáticamente y comprobados contra el ERP, de 231 facturas y albaranes de meses cerrados. Lo que no se puede verificar, va a revisión humana.</span><details class="metodo"><summary>Cómo se calcula</summary><p>231 facturas y albaranes de meses ya cerrados, contrastados con el ERP por identidad (CIF y número; importes con tolerancia de dos céntimos). El 45 % (103) se aprueba automáticamente, y solo si dos lectores independientes coinciden al céntimo. De esos, 88 se pudieron comprobar contra el ERP y ninguno tenía un dato incorrecto. Con 88 comprobaciones, la tasa real de error podría llegar al 3,4 % con un 95 % de confianza: es un resultado alentador, no una garantía. Sin la segunda lectura no hay aprobación automática.</p></details></span></div>
       </div>
 
       <div class="tarjeta">
@@ -689,14 +688,8 @@
     <p>Documentos escaneados, varios dentro de un mismo PDF, con adjuntos intercalados y facturas
        extranjeras mezcladas. El reto no era leer, era decidir qué número es el total y poder
        demostrarlo.</p>
-    <p>Dos formas independientes de obtener los importes: una anclada en la aritmética del documento
-       y otra en su posición en la página. Solo se aprueba automáticamente lo que ambas confirman;
-       el resto va a revisión de una persona.</p>
-    <p>Medido a ciegas sobre <span class="dato">213 documentos reales</span> de meses cerrados,
-       contrastados campo a campo contra el ERP: acierta siempre el número de documento,
-       el 91 % de los importes y <span class="dato">no ha aprobado ni un documento con un dato
-       incorrecto</span>. La automatización sin intervención pasó del 2 % al 34,7 % en una
-       iteración; el trabajo continúa.</p>
+    <p>Dos lectores independientes: uno anclado en la aritmética del documento y otro que lee la página con un modelo de visión local. Solo se aprueba automáticamente lo que ambos confirman al céntimo; el resto va a revisión de una persona.</p>
+    <p>Medido sobre <span class="dato">231 documentos reales</span> de meses cerrados y contrastado con el ERP: el 45 % se aprueba solo y <span class="dato">en los 88 aprobados comprobables no hay ni un dato incorrecto</span> (tasa real de error ≤3,4 % con 95 % de confianza). El resto lo revisa una persona; el trabajo continúa.</p>
     <p class="tec">OCR local · modelos de visión y lenguaje en local · contraste contra el ERP.
        Todo el procesamiento en la máquina: coste por uso cero.</p>
   </article>
